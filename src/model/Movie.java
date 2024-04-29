@@ -8,5 +8,10 @@ public class Movie {
         private String fullName;
 
     }
+    private static class Cast {
+        private String fullName;
+        private String role;
+
+    }
 
 }

@@ -21,23 +21,22 @@ public class Movie {
         return description;
     }
 
-    public Director getDirector() {
-        return director;
-    }
 
-    public List<Cast> getCast() {
-        return cast;
-    }
 
-    class Director {
+    static class Director {
         private String fullName;
 
         public String getFullName() {
             return fullName;
         }
+
+        @Override
+        public String toString() {
+            return "Режиссер: " + fullName;
+        }
     }
 
-    class Cast {
+    static class Cast {
         private String fullName;
         private String role;
 
@@ -48,6 +47,20 @@ public class Movie {
         public String getRole() {
             return role;
         }
+
+        @Override
+        public String toString() {
+            return "\n     Актер: " + fullName + "\n     Роль: " + role;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "\nНазвание фильма: '" + name +
+                "'\n     Год выхода: " + year +
+                "\n     Описание: " + description +
+                "\n     " + director.toString() +
+                "\n     " + cast.toString();
     }
 }
 

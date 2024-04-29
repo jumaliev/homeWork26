@@ -1,16 +1,14 @@
 import fileUtils.FileUtils;
 import model.Movie;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 public class AppRunner {
     public AppRunner() {
         run();
-        System.out.println(searchForMovieByFullTitle("Carnival Row"));
-        System.out.println(searchForFovieByPartialTitleMatch("G"));
+
     }
 
 
@@ -19,6 +17,15 @@ public class AppRunner {
         for (Movie e : FileUtils.readFile()) {
             System.out.println(e);
         }
+        System.out.println("============================================================");
+        System.out.println(searchForMovieByFullTitle("Carnival Row"));
+        System.out.println("============================================================");
+        System.out.println(searchForFovieByPartialTitleMatch("Go"));
+        System.out.println("============================================================");
+        System.out.println(sortByAscendingYearOfFilmRelease());
+        System.out.println("============================================================");
+        System.out.println(sortByDescendingYearOfFilmRelease());
+
     }
     public List<Movie> searchForMovieByFullTitle(String movieName) {
         List<Movie> movies = FileUtils.readFile();
@@ -27,6 +34,19 @@ public class AppRunner {
     public List<Movie> searchForFovieByPartialTitleMatch(String partialName) {
         List<Movie> movies = FileUtils.readFile();
         return movies.stream().filter(movie -> movie.getName().toLowerCase().contains(partialName.toLowerCase())).collect(Collectors.toList());
+    }
+
+    public List<Movie> sortByAscendingYearOfFilmRelease(){
+        List<Movie> movies = FileUtils.readFile();
+        Comparator<Movie> cmp = Comparator.comparingInt(Movie::getYear);
+        movies.sort(cmp);
+        return movies;
+    }
+    public List<Movie> sortByDescendingYearOfFilmRelease(){
+        List<Movie> movies = FileUtils.readFile();
+        Comparator<Movie> cmp = Comparator.comparingInt(Movie::getYear);
+        movies.sort(cmp.reversed());
+        return movies;
     }
 }
 

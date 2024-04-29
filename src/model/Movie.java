@@ -2,7 +2,7 @@ package model;
 
 import java.util.List;
 
-public class Movie {
+public class Movie{
     private String name;
     private int year;
     private String description;

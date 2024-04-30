@@ -28,8 +28,6 @@ public class AppRunner {
     }
 
     public void run() {
-
-        while (true) {
             System.out.println("""
                     Меню:
                     1 чтобы вывезти всю коллекцию фильмов на экран
@@ -71,33 +69,37 @@ public class AppRunner {
                     searchForFilmsWhereTheActorParticipated(userCast);
 
             }
-        }
 
+            System.out.println("Все фильмы:");
+            for (Movie e : FileUtils.readFile()) {
+                System.out.println(e);
+            }
+        System.out.println(searchForMovieByFullTitle("Carnival Row"));
+        System.out.println("============================================================");
+        System.out.println(searchForMovieByPartialTitleMatch("Go"));
+        System.out.println("============================================================");
+        System.out.println(sortByAscendingYearOfFilmRelease());
+        System.out.println("============================================================");
+        System.out.println(sortByDescendingYearOfFilmRelease());
+        System.out.println("============================================================");
+        System.out.println(sortByAscendingMovieTitle());
+        System.out.println("============================================================");
+        System.out.println(sortByMovieTitleInDescendingOrder());
+        System.out.println("============================================================");
+        System.out.println(sortByAscendingDirectorName());
+        System.out.println("============================================================");
+        System.out.println(sortByDescendingNameOfDirector());
+        System.out.println("============================================================");
+        searchForFilmsWhereTheActorParticipated("David Tennant");
+        System.out.println("============================================================");
+        searchForFilmsDirectedByTheDirector("Peter Jackson");
+        System.out.println("============================================================");
+        findMoviesByYearOfRelease(2019);
+        System.out.println("============================================================");
+        searchForRoleInMovies("David Tennant");
+        System.out.println("============================================================");
+        fillActorNamesRolesMap();
 
-//        System.out.println("============================================================");
-
-//        System.out.println("============================================================");
-//        System.out.println(sortByAscendingYearOfFilmRelease());
-//        System.out.println("============================================================");
-//        System.out.println(sortByDescendingYearOfFilmRelease());
-//        System.out.println("============================================================");
-//        System.out.println(sortByAscendingMovieTitle());
-//        System.out.println("============================================================");
-//        System.out.println(sortByMovieTitleInDescendingOrder());
-//        System.out.println("============================================================");
-//        System.out.println(sortByAscendingDirectorName());
-//        System.out.println("============================================================");
-//        System.out.println(sortByDescendingNameOfDirector());
-//        System.out.println("============================================================");
-//        searchForFilmsWhereTheActorParticipated("David Tennant");
-//        System.out.println("============================================================");
-//        searchForFilmsDirectedByTheDirector("Peter Jackson");
-//        System.out.println("============================================================");
-//        findMoviesByYearOfRelease(2019);
-//        System.out.println("============================================================");
-//        searchForRoleInMovies("David Tennant");
-//        System.out.println("============================================================");
-//        fillActorNamesRolesMap();
 
     }
 

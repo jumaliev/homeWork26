@@ -47,7 +47,7 @@ public class Movie{
 
     }
 
-    static class Cast {
+    public static class Cast {
         private String fullName;
         private String role;
 
@@ -58,6 +58,7 @@ public class Movie{
         public String getRole() {
             return role;
         }
+
 
         @Override
         public String toString() {

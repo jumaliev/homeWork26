@@ -6,10 +6,13 @@ import java.util.stream.Collectors;
 
 public class AppRunner {
     private Map<String, List<Movie>> castMoviesMap;
+    private Map<String, List<Movie>> directorMoviesMap;
 
     public AppRunner() {
         this.castMoviesMap = new HashMap<>();
-        searchForFilmsWhereTheActorParticipated();
+        this.directorMoviesMap = new HashMap<>();
+        fillingMoviesByActor();
+        fillingDirectorToMoviesMap();
 
         run();
 
@@ -37,7 +40,9 @@ public class AppRunner {
         System.out.println("============================================================");
         System.out.println(sortByDescendingNameOfDirector());
         System.out.println("============================================================");
-        findMoviesByActor("David Tennant");
+        searchForFilmsWhereTheActorParticipated("David Tennant");
+        System.out.println("============================================================");
+        searchForFilmsDirectedByTheDirector("Peter Jackson");
 
 
     }
@@ -94,12 +99,7 @@ public class AppRunner {
         return movies;
     }
 
-    public List<Movie> searchForFilmsWhereTheActorParticipated(String actorName) {
-            List<Movie> movies = FileUtils.readFile();
-            return movies.stream().filter(movie -> movie.getCast().stream().anyMatch(actor -> actor.getFullName().equalsIgnoreCase(actorName))).collect(Collectors.toList());
-
-    }
-    private void searchForFilmsWhereTheActorParticipated() {
+    private void fillingMoviesByActor() {
         List<Movie> movies = FileUtils.readFile();
         for (Movie movie : movies) {
             for (Movie.Cast actor : movie.getCast()) {
@@ -109,13 +109,27 @@ public class AppRunner {
         }
     }
 
-    public void findMoviesByActor(String actorName) {
+    public void searchForFilmsWhereTheActorParticipated(String actorName) {
         List<Movie> movies = castMoviesMap.getOrDefault(actorName, Collections.emptyList());
         for (Movie movie : movies) {
             System.out.println(movie.getName());
         }
     }
-    
+    private void fillingDirectorToMoviesMap() {
+        List<Movie> movies = FileUtils.readFile();
+        for (Movie movie : movies) {
+            String directorName = movie.getDirector().getFullName();
+            directorMoviesMap.computeIfAbsent(directorName, k -> new ArrayList<>()).add(movie);
+        }
+    }
+
+    public void searchForFilmsDirectedByTheDirector(String directorFullName) {
+        List<Movie> movies = directorMoviesMap.getOrDefault(directorFullName, Collections.emptyList());
+        for (Movie movie : movies) {
+            System.out.println(movie.getName());
+        }
+    }
+
 
 
 

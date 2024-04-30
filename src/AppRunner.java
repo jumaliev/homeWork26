@@ -5,9 +5,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class AppRunner {
-    private Map<String, List<String>> castMoviesMap;
+    private Map<String, List<Movie>> castMoviesMap;
 
     public AppRunner() {
+        this.castMoviesMap = new HashMap<>();
+        searchForFilmsWhereTheActorParticipated();
+
         run();
 
     }
@@ -34,8 +37,8 @@ public class AppRunner {
         System.out.println("============================================================");
         System.out.println(sortByDescendingNameOfDirector());
         System.out.println("============================================================");
-        searchForFilmsWhereTheActorParticipated("Orlando Bloom");
-        System.out.println(castMoviesMap);
+        findMoviesByActor("David Tennant");
+
 
     }
 
@@ -91,13 +94,29 @@ public class AppRunner {
         return movies;
     }
 
-    public void searchForFilmsWhereTheActorParticipated(String actorName) {
+    public List<Movie> searchForFilmsWhereTheActorParticipated(String actorName) {
+            List<Movie> movies = FileUtils.readFile();
+            return movies.stream().filter(movie -> movie.getCast().stream().anyMatch(actor -> actor.getFullName().equalsIgnoreCase(actorName))).collect(Collectors.toList());
+
+    }
+    private void searchForFilmsWhereTheActorParticipated() {
         List<Movie> movies = FileUtils.readFile();
-        castMoviesMap = new HashMap<>();
         for (Movie movie : movies) {
-            castMoviesMap.computeIfAbsent(actorName, k -> new ArrayList<>()).add(movie.getName());
+            for (Movie.Cast actor : movie.getCast()) {
+                String actorName = actor.getFullName();
+                castMoviesMap.computeIfAbsent(actorName, k -> new ArrayList<>()).add(movie);
+            }
         }
     }
+
+    public void findMoviesByActor(String actorName) {
+        List<Movie> movies = castMoviesMap.getOrDefault(actorName, Collections.emptyList());
+        for (Movie movie : movies) {
+            System.out.println(movie.getName());
+        }
+    }
+    
+
 
 
 

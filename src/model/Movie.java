@@ -3,6 +3,7 @@ package model;
 import java.util.List;
 
 public class Movie{
+
     private String name;
     private int year;
     private String description;
@@ -11,6 +12,15 @@ public class Movie{
 
     public String getName() {
         return name;
+    }
+
+
+    public Director getDirector() {
+        return director;
+    }
+
+    public List<Cast> getCast() {
+        return cast;
     }
 
     public int getYear() {
@@ -23,7 +33,7 @@ public class Movie{
 
 
 
-    static class Director {
+    public static class Director {
         private String fullName;
 
         public String getFullName() {
@@ -34,6 +44,7 @@ public class Movie{
         public String toString() {
             return "Режиссер: " + fullName;
         }
+
     }
 
     static class Cast {

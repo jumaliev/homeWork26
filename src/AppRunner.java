@@ -1,6 +1,7 @@
 import fileUtils.FileUtils;
 import model.Movie;
 
+import java.sql.SQLOutput;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -10,6 +11,7 @@ public class AppRunner {
     private Map<Integer, List<Movie>> yearMoviesMap;
     private Map<String, List<String>> actorRolesMap;
     private Map<String, Set<String>> actorNamesRolesMap;
+    private Scanner sc = new Scanner(System.in);
 
     public AppRunner() {
         this.castMoviesMap = new HashMap<>();
@@ -27,36 +29,75 @@ public class AppRunner {
 
     public void run() {
 
-        for (Movie e : FileUtils.readFile()) {
-            System.out.println(e);
-        }
-        System.out.println("============================================================");
-        System.out.println(searchForMovieByFullTitle("Carnival Row"));
-        System.out.println("============================================================");
-        System.out.println(searchForMovieByPartialTitleMatch("Go"));
-        System.out.println("============================================================");
-        System.out.println(sortByAscendingYearOfFilmRelease());
-        System.out.println("============================================================");
-        System.out.println(sortByDescendingYearOfFilmRelease());
-        System.out.println("============================================================");
-        System.out.println(sortByAscendingMovieTitle());
-        System.out.println("============================================================");
-        System.out.println(sortByMovieTitleInDescendingOrder());
-        System.out.println("============================================================");
-        System.out.println(sortByAscendingDirectorName());
-        System.out.println("============================================================");
-        System.out.println(sortByDescendingNameOfDirector());
-        System.out.println("============================================================");
-        searchForFilmsWhereTheActorParticipated("David Tennant");
-        System.out.println("============================================================");
-        searchForFilmsDirectedByTheDirector("Peter Jackson");
-        System.out.println("============================================================");
-        findMoviesByYearOfRelease(2019);
-        System.out.println("============================================================");
-        searchForRoleInMovies("David Tennant");
-        System.out.println("============================================================");
-        fillActorNamesRolesMap();
+        while (true) {
+            System.out.println("""
+                    Меню:
+                    1 чтобы вывезти всю коллекцию фильмов на экран
+                    2 чтобы найти фильм по полному или частичному совпадению названию
+                    3 чтобы сортировать всю коллекцию фильмов по возрастанию и убыванию по следующим полям:
+                        по году выпуска фильма
+                        по названию
+                        по режиссеру
+                    4 чтобы найти фильм по имени актеры
+                    5 чтобы найти фильм по имени режиссера
+                    6 чтобы найти фильм по году выпуска
+                    7 чтобы найти фильм и роль по имени актера
+                    8 чтобы получить список всех актеров, фильмов в которых они снималиьс и их роли в этом фильме
+                    0 чтобы выйти
+                    """);
+            int userAnswer = sc.nextInt();
+            switch (userAnswer) {
+                case 1:
+                    System.out.println("Все фильмы:");
+                    for (Movie e : FileUtils.readFile()) {
+                        System.out.println(e);
+                    }
+                    break;
+                case 2:
+                    System.out.print("Введите полное или частичное название фильма: ");
+                    String userMovie = sc.nextLine();
+                    if (searchForMovieByFullTitle(userMovie) != null) {
+                        System.out.println(searchForMovieByFullTitle(userMovie));
+                    } else if (searchForMovieByPartialTitleMatch(userMovie) != null) {
+                        System.out.println(searchForMovieByPartialTitleMatch(userMovie));
+                    } else {
+                        System.out.println("Фильм с таким название не найден");
+                    }
+                case 3:
+                case 4:
+                    System.out.print("ВВедите имя актера: ");
+                    String userCast = sc.nextLine();
+                    System.out.printf("Фильмы в котором снимался актер %s", userCast);
+                    searchForFilmsWhereTheActorParticipated(userCast);
 
+            }
+        }
+
+
+//        System.out.println("============================================================");
+
+//        System.out.println("============================================================");
+//        System.out.println(sortByAscendingYearOfFilmRelease());
+//        System.out.println("============================================================");
+//        System.out.println(sortByDescendingYearOfFilmRelease());
+//        System.out.println("============================================================");
+//        System.out.println(sortByAscendingMovieTitle());
+//        System.out.println("============================================================");
+//        System.out.println(sortByMovieTitleInDescendingOrder());
+//        System.out.println("============================================================");
+//        System.out.println(sortByAscendingDirectorName());
+//        System.out.println("============================================================");
+//        System.out.println(sortByDescendingNameOfDirector());
+//        System.out.println("============================================================");
+//        searchForFilmsWhereTheActorParticipated("David Tennant");
+//        System.out.println("============================================================");
+//        searchForFilmsDirectedByTheDirector("Peter Jackson");
+//        System.out.println("============================================================");
+//        findMoviesByYearOfRelease(2019);
+//        System.out.println("============================================================");
+//        searchForRoleInMovies("David Tennant");
+//        System.out.println("============================================================");
+//        fillActorNamesRolesMap();
 
     }
 
@@ -128,6 +169,7 @@ public class AppRunner {
             System.out.println(movie.getName());
         }
     }
+
     private void fillingDirectorToMoviesMap() {
         List<Movie> movies = FileUtils.readFile();
         for (Movie movie : movies) {
@@ -142,6 +184,7 @@ public class AppRunner {
             System.out.println(movie.getName());
         }
     }
+
     public void fillingYearMoviesmap() {
         List<Movie> movies = FileUtils.readFile();
         for (Movie movie : movies) {
@@ -149,6 +192,7 @@ public class AppRunner {
             yearMoviesMap.computeIfAbsent(year, k -> new ArrayList<>()).add(movie);
         }
     }
+
     public void findMoviesByYearOfRelease(int year) { //Всех фильмов, которые были выпущены в определенном году.
         List<Movie> movies = yearMoviesMap.getOrDefault(year, Collections.emptyList());
         for (int i = 0; i < movies.size(); i++) {
@@ -169,21 +213,18 @@ public class AppRunner {
             }
         }
     }
+
     public void fillActorNamesRolesMap() { // Список всех актёров из всех фильмов с указанием их ролей.
         List<Movie> movies = FileUtils.readFile();
         for (Movie movie : movies) {
             for (Movie.Cast cast : movie.getCast()) {
                 String actorName = cast.getFullName();
                 actorNamesRolesMap.computeIfAbsent(actorName, k -> new HashSet<>()).add(movie.getName() + ": " + cast.getRole());
-                System.out.printf("Имя актёра: %s\nРоль актёра: %s\n",actorName,cast.getRole()) ;
+                System.out.printf("Имя актёра: %s\nРоль актёра: %s\n", actorName, cast.getRole());
                 System.out.println("============================================================");
             }
         }
     }
-
-
-
-
 
 
 }

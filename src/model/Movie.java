@@ -27,10 +27,6 @@ public class Movie{
         return year;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
 
 
     public static class Director {
